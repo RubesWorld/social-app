@@ -7,7 +7,7 @@ function Post({ image, content, user, id }) {
   const isCurrentUser = currentUser === user;
 
   const handleDeletePost = () => {
-    dispatch({ type: "REMOVE_POST", payload: { id } });
+    dispatch({ type: "DELETE_POST", payload: { id } });
   };
 
   return (
