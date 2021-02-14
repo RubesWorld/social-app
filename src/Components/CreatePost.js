@@ -1,8 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useRef, useContext } from "react";
+import { PostContext } from "../App";
 
-function CreatePost({ user, setPosts, posts }) {
+function CreatePost({ user }) {
+  const { dispatch } = useContext(PostContext);
   const [content, setContent] = useState("");
   const [image, setImage] = useState(null);
+  const imageRef = useRef();
 
   const imageChange = (e) => {
     setImage(e.target.files[0]);
@@ -14,9 +17,11 @@ function CreatePost({ user, setPosts, posts }) {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    const post = { content, image, user };
-    const newPost = [post, ...posts];
-    setPosts(newPost);
+    const post = { content, image, user, id: Date.now() };
+    // handleAddPost(post);
+    dispatch({ type: "ADD_POST", payload: { post } });
+    setContent("");
+    imageRef.current.value = "";
   };
 
   return (
@@ -27,8 +32,9 @@ function CreatePost({ user, setPosts, posts }) {
           type="text"
           placeholder="Add Post Content"
           onChange={inputChange}
+          value={content}
         />
-        <input type="file" onChange={imageChange} />
+        <input type="file" onChange={imageChange} ref={imageRef} />
         <button type="submit">Create</button>
       </form>
       {/* <p>{content}</p>
